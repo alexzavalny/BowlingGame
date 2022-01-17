@@ -1,4 +1,9 @@
+require_relative 'bowling_game_error'
+
 class BowlingFrame
+  FRAME_MAX_PINS = 10
+
+  # takes frame_number as parameter for initialization, needs for logic of 10th frame
   def initialize(frame_number)
     @frame_number = frame_number
     @rolls = []
@@ -7,13 +12,22 @@ class BowlingFrame
 
   # inserts roll into frame if possible
   def add_roll(roll)
-    # TODO: add validation
-    @rolls << roll unless full?
+    raise BowlingGameError, "Cannot add roll to full frame" if full?
+    if roll > FRAME_MAX_PINS 
+      raise BowlingGameError, "Cannot add roll - pins exceed max count" 
+    end
+
+    if (@rolls.length == 1 && @rolls[0] + roll > FRAME_MAX_PINS && @frame_number < 10)
+      raise BowlingGameError, "Cannot add roll - pins exceed max count" 
+    end
+    
+    @rolls << roll 
   end
 
   # add reward to the frame with strike or spare
   def add_reward(reward)
-    @rewards << reward if needs_reward?
+    raise BowlingGameError, "Cannot add reward to this frame" unless needs_reward?
+    @rewards << reward 
   end 
 
   # checks if frame needs more rewards

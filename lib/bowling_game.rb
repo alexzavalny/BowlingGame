@@ -1,7 +1,7 @@
 require_relative 'bowling_frame'
+require_relative 'bowling_game_error'
 
 class BowlingGame
-  FRAME_MAX_PINS = 10
   FRAME_COUNT = 10
 
   def initialize
@@ -20,6 +20,8 @@ class BowlingGame
   # as shown in real bowling game visual score
   #    i.e if each frame earned 1 point, returns (1, 2, 3, 4...)
   def summed_frames
+    # TODO: should raise exception if not full ten frames?
+
     sum = 0
     @frames.map { |f| sum += f.score }
   end
@@ -36,6 +38,8 @@ class BowlingGame
 
   # adds roll to current frame and switches the index to next frame
   def add_roll(roll)
+    raise BowlingGameError, "Too many rolls" if @frames.last.full? 
+
     giveaway_rewards roll
     @frames[@cur_ndx].add_roll roll
     @cur_ndx += 1 if @frames[@cur_ndx].full?
