@@ -1,4 +1,5 @@
 require './lib/bowling_game'
+#require './lib/bowling_game_alternative'
 
 RSpec.describe BowlingGame do
   describe "#add_rolls" do
