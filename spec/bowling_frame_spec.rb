@@ -266,7 +266,7 @@ RSpec.describe BowlingFrame do
         end
       end
 
-      context "with 1 roll, strike, and 2 reward" do
+      context "with 1 roll, strike, and 2 rewards" do
         it "should not need reward" do
           subject.add_roll(10)
           subject.add_reward(5)
