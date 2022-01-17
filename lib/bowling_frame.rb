@@ -2,14 +2,32 @@ class BowlingFrame
   def initialize(frame_number)
     @frame_number = frame_number
     @rolls = []
+    @rewards = []
   end
 
   # inserts roll into frame if possible
   def add_roll(roll)
     # TODO: add validation
-    @rolls << roll
+    @rolls << roll unless full?
   end
 
+  # add reward to the frame with strike or spare
+  def add_reward(reward)
+    @rewards << reward unless needs_reward?
+  end 
+
+  # checks if frame needs more rewards
+  #  frame needs 0 rewards if no strike or spare
+  #  frame needs 1 reward if spare
+  #  frame needs 2 rewards if strike
+  #  reward is next 1/2 roll added to score
+  def needs_reward? 
+  end
+
+  # checks if frame is full with rolls 
+  #  - 2 for 1..9 frame
+  #  - 2 for 10th if no strike or spare
+  #  - 3 for 10th if strike or spare
   def full?
     if @frame_number < 10
       strike? or @rolls.length == 2

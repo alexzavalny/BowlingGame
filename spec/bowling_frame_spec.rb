@@ -225,4 +225,75 @@ RSpec.describe BowlingFrame do
       end
     end
   end
+
+  describe "#needs_reward?" do
+    context "in first frame" do
+      subject { described_class.new(1) }
+
+      context "with no rolls" do
+        it "should not need reward" do
+          expect(subject.needs_reward?).to be false
+        end
+      end
+
+      context "with 1 roll" do
+        it "should not need reward" do
+          subject.add_roll(1)
+          expect(subject.needs_reward?).to be false
+        end
+      end
+
+      context "with 2 rolls, not spare" do
+        it "should not need reward" do
+          subject.add_roll(1)
+          subject.add_roll(1)
+          expect(subject.needs_reward?).to be false
+        end
+      end
+
+      context "with 1 roll, strike" do
+        it "should need reward" do
+          subject.add_roll(10)
+          expect(subject.needs_reward?).to be true
+        end
+      end
+
+      context "with 1 roll, strike, and 1 reward" do
+        it "should need reward" do
+          subject.add_roll(10)
+          subject.add_reward(5)
+          expect(subject.needs_reward?).to be true
+        end
+      end
+
+      context "with 1 roll, strike, and 2 reward" do
+        it "should not need reward" do
+          subject.add_roll(10)
+          subject.add_reward(5)
+          subject.add_reward(5)
+          expect(subject.needs_reward?).to be false
+        end
+      end
+
+      context "with 2 rolls, spare and 1 reward" do
+        it "should not need reward" do
+          subject.add_roll(5)
+          subject.add_reward(5)
+          subject.add_reward(5)
+          expect(subject.needs_reward?).to be false
+        end
+      end
+
+      context "with 2 rolls, spare" do
+        it "should need reward" do
+          subject.add_roll(5)
+          subject.add_roll(5)
+          expect(subject.needs_reward?).to be true
+        end
+      end
+    end
+  end
+
+  describe "#add_reward" do
+  end
 end
