@@ -58,6 +58,6 @@ class BowlingFrame
   # calculates total score for this frame
   # NOTE: this score is isolated from other frames
   def score 
-    @rolls.sum
+    @rolls.sum + @rewards.sum
   end
 end

@@ -25,9 +25,18 @@ class BowlingGame
   end
 
   private
-  
+  # Gives roll as a reward to all frames that are waiting for reward
+  # because only 2 previous frames can be waiting for reward, we only 
+  # check them.
+  def giveaway_rewards(roll)
+    (@cur_ndx - 2..@cur_ndx - 1).each do |i|
+      @frames[i].add_reward(roll) if @frames[i].needs_reward?
+    end
+  end
+
   # adds roll to current frame and switches the index to next frame
   def add_roll(roll)
+    giveaway_rewards roll
     @frames[@cur_ndx].add_roll roll
     @cur_ndx += 1 if @frames[@cur_ndx].full?
   end
