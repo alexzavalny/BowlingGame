@@ -13,7 +13,7 @@ class BowlingFrame
 
   # add reward to the frame with strike or spare
   def add_reward(reward)
-    @rewards << reward unless needs_reward?
+    @rewards << reward if needs_reward?
   end 
 
   # checks if frame needs more rewards
@@ -21,7 +21,12 @@ class BowlingFrame
   #  frame needs 1 reward if spare
   #  frame needs 2 rewards if strike
   #  reward is next 1/2 roll added to score
-  def needs_reward? 
+  def needs_reward?
+    return false unless full?
+    return true if strike? && (@rewards.length < 2)
+    return true if spare? && @rewards.empty?
+
+    false
   end
 
   # checks if frame is full with rolls 
@@ -47,7 +52,7 @@ class BowlingFrame
   
   # checks if two rolls sum is 10
   def spare?
-    @rolls.length > 1 && @rolls[0..1].sum == 10
+    @rolls.length > 1 && @rolls[0..1].sum == 10 && @rolls[0] != 10
   end
 
   # calculates total score for this frame
