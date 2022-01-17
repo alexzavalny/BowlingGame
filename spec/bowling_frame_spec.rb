@@ -34,6 +34,91 @@ RSpec.describe BowlingFrame do
         end
       end
     end
+
+    context "in last frame" do
+      subject { described_class.new(10) }
+
+      context "with no rolls" do
+        it "should not be full" do
+          expect(subject).to_not be_full
+        end
+      end
+
+      context "with 1 roll of not strike (1 pin)" do
+        it "should not be full" do
+          subject.add_roll(1)
+          expect(subject).to_not be_full
+        end
+      end
+
+      context "with 1 roll of strike (10 pins)" do
+        it "should not be full" do
+          subject.add_roll(1)
+          expect(subject).to_not be_full
+        end
+      end
+
+      context "with 2 rolls of not spare" do
+        it "should be full" do
+          subject.add_roll(1)
+          subject.add_roll(6)
+          expect(subject).to be_full
+        end
+      end
+
+      context "with 2 rolls of spare" do
+        it "should not be full" do
+          subject.add_roll(1)
+          subject.add_roll(9)
+          expect(subject).to_not be_full
+        end
+      end
+
+      context "with 3 rolls (one strike, then 1, 1 pin)" do
+        it "should be full" do
+          subject.add_roll(10)
+          subject.add_roll(1)
+          subject.add_roll(1)
+          expect(subject).to be_full
+        end
+      end
+
+      context "with 3 rolls (one strike, then strike, then 1 pin)" do
+        it "should be full" do
+          subject.add_roll(10)
+          subject.add_roll(10)
+          subject.add_roll(1)
+          expect(subject).to be_full
+        end
+      end
+
+      context "with 3 rolls (three strikes)" do
+        it "should be full" do
+          subject.add_roll(10)
+          subject.add_roll(10)
+          subject.add_roll(10)
+          expect(subject).to be_full
+        end
+      end
+
+      context "with 3 rolls (spare, then less then 10 pin)" do
+        it "should be full" do
+          subject.add_roll(5)
+          subject.add_roll(5)
+          subject.add_roll(5)
+          expect(subject).to be_full
+        end
+      end
+
+      context "with 3 rolls (spare, then strike)" do
+        it "should be full" do
+          subject.add_roll(5)
+          subject.add_roll(5)
+          subject.add_roll(10)
+          expect(subject).to be_full
+        end
+      end
+    end
   end
 
   describe "#strike?" do
