@@ -1,6 +1,9 @@
 require_relative 'bowling_frame'
 
 class BowlingGame
+  def initialize
+  end
+
   # takes an array of bowling game rolls (for 1 person)
   # and add those rolls to the gaming session
   def add_rolls(rolls)

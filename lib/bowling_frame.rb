@@ -1,5 +1,7 @@
 class BowlingFrame
-  def initialize()
+  def initialize(frame_number)
+    @frame_number = frame_number
+    @rolls = []
   end
 
   # inserts roll into frame is possible
