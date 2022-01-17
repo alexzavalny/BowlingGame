@@ -278,7 +278,7 @@ RSpec.describe BowlingFrame do
       context "with 2 rolls, spare and 1 reward" do
         it "should not need reward" do
           subject.add_roll(5)
-          subject.add_reward(5)
+          subject.add_roll(5)
           subject.add_reward(5)
           expect(subject.needs_reward?).to be false
         end
@@ -294,6 +294,79 @@ RSpec.describe BowlingFrame do
     end
   end
 
+  describe "#add_roll" do
+    context "if first frame and third roll is added" do
+      it "should raise error" do
+        first_frame = described_class.new(1) 
+        2.times { first_frame.add_roll(3) } 
+        expect{ first_frame.add_roll(5) }.to raise_error(BowlingGameError)
+      end
+    end
+
+    context "if first frame, strike and second roll is added" do
+      it "should raise error" do
+        first_frame = described_class.new(1) 
+        first_frame.add_roll(10)
+        expect{ first_frame.add_roll 5 }.to raise_error(BowlingGameError)
+      end
+    end
+
+    context "if last frame, not strike, not spare, third roll added" do
+      it "should raise error" do
+        last_frame = described_class.new(10) 
+        2.times { last_frame.add_roll(1) }
+        expect{ last_frame.add_roll 5 }.to raise_error(BowlingGameError)
+      end
+    end
+
+    context "if last frame, strike, forth roll is added" do
+      it "should raise error" do
+        last_frame = described_class.new(10) 
+        3.times { last_frame.add_roll(10) }
+        expect{ last_frame.add_roll 10 }.to raise_error(BowlingGameError)
+      end
+    end
+  end
+
   describe "#add_reward" do
+    context "if first frame, not strike or spare, reward is added" do
+      it "should raise error" do
+        first_frame = described_class.new(1) 
+        2.times { first_frame.add_roll(3) }
+        expect{ first_frame.add_reward 5 }.to raise_error(BowlingGameError)
+      end
+    end
+
+    context "if first frame, spare, reward is added" do
+      it "should not raise error" do
+        first_frame = described_class.new(1) 
+        2.times { first_frame.add_roll(5) }
+        expect{ first_frame.add_reward 5 }.to_not raise_error(BowlingGameError)
+      end
+    end
+
+    context "if first frame, strike, 2 rewards is added" do
+      it "should not raise error" do
+        first_frame = described_class.new(1) 
+        first_frame.add_roll(10) 
+        expect{ 2.times { first_frame.add_reward 5 } }.to_not raise_error(BowlingGameError)
+      end
+    end
+
+    context "if last frame, strike, reward is added" do
+      it "should raise error" do
+        last_frame = described_class.new(10) 
+        last_frame.add_roll(10) 
+        expect{ last_frame.add_reward 5 }.to raise_error(BowlingGameError)
+      end
+    end
+
+    context "if first frame, strike, 3 rewards is added" do
+      it "should raise error" do
+        first_frame = described_class.new(1) 
+        first_frame.add_roll(10) 
+        expect{ 3.times { first_frame.add_reward 5 } }.to raise_error(BowlingGameError)
+      end
+    end
   end
 end

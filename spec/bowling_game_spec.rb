@@ -1,6 +1,16 @@
 require './lib/bowling_game'
 
 RSpec.describe BowlingGame do
+  describe "#add_rolls" do
+    context "if 13 strikes is added" do
+      subject { described_class.new }
+
+      it "should raise error" do
+        expect{ subject.add_rolls([10] * 13)  }.to raise_error(BowlingGameError)
+      end
+    end
+  end
+
   describe "#summed_frames" do
     context "with zero hits" do
       subject { described_class.new }
