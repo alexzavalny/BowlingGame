@@ -6,7 +6,7 @@ class BowlingGame
 
   def initialize
     @frames = []
-    @cur_ndx = 0
+    @current_frame_index = 0
     FRAME_COUNT.times { |x| @frames << BowlingFrame.new(x + 1) }
   end
 
@@ -31,8 +31,8 @@ class BowlingGame
   # because only 2 previous frames can be waiting for reward, we only 
   # check them.
   def giveaway_rewards(roll)
-    (@cur_ndx - 2..@cur_ndx - 1).each do |i|
-      @frames[i].add_reward(roll) if @frames[i].needs_reward?
+    @frames[0..@current_frame_index - 1].each do |frame|
+      frame.add_reward(roll) if frame.needs_reward?
     end
   end
 
@@ -41,7 +41,7 @@ class BowlingGame
     raise BowlingGameError, "Too many rolls" if @frames.last.full? 
 
     giveaway_rewards roll
-    @frames[@cur_ndx].add_roll roll
-    @cur_ndx += 1 if @frames[@cur_ndx].full?
+    @frames[@current_frame_index].add_roll roll
+    @current_frame_index += 1 if @frames[@current_frame_index].full?
   end
 end

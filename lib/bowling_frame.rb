@@ -13,6 +13,7 @@ class BowlingFrame
   # inserts roll into frame if possible
   def add_roll(roll)
     raise BowlingGameError, "Cannot add roll to full frame" if full?
+    
     if roll > FRAME_MAX_PINS 
       raise BowlingGameError, "Cannot add roll - pins exceed max count" 
     end
@@ -48,7 +49,7 @@ class BowlingFrame
   #  - 2 for 10th if no strike or spare
   #  - 3 for 10th if strike or spare
   def full?
-    if @frame_number < 10
+    if @frame_number < 10 # TODO This is magic number. Refactor.
       strike? or @rolls.length == 2
     else
       @rolls.length == if strike? || spare?
@@ -61,12 +62,12 @@ class BowlingFrame
 
   # checks if first roll is 10
   def strike?
-    @rolls[0] == 10
+    @rolls[0] == FRAME_MAX_PINS
   end
   
   # checks if two rolls sum is 10
   def spare?
-    @rolls.length > 1 && @rolls[0..1].sum == 10 && @rolls[0] != 10
+    @rolls.length > 1 && @rolls[0..1].sum == FRAME_MAX_PINS && @rolls[0] != FRAME_MAX_PINS
   end
 
   # calculates total score for this frame
